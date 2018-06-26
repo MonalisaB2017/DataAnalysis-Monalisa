@@ -1,0 +1,7 @@
+##### query to retrieve Nth highest salary######################
+with Result As
+(select salary,Dense_Rank() over (order by salary DESC) as Rank
+from employees
+)
+select top 1 
+from Result  where employees.rank=3
