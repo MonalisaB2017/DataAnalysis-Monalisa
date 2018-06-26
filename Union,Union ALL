@@ -1,0 +1,14 @@
+
+
+************************Differences between Union and Union ALL **********************************
+UNION  removes duplicate rows where UNION ALL does not
+UNION has  to perform distinct sort to remove duplicates,which makes it less faster than UNION ALL
+
+ORDER BY clause should be used only on the select statement of UNION query
+
+
+*************************Difference between Union and Join******************************************
+UNION combines the result-set of two or more select queries into a single result-set which includes all the rows from all the 
+queries in the union ,where as JOINS ,retrieve data from two or more tables based on logical relationships between .
+
+In short UNION combines rows from 2 or more tables,where JOINS combine columns from 2 or more tables.
