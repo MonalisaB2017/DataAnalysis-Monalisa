@@ -1,0 +1,44 @@
+Differeneces between Rank() and dense_Rank()
+
+Rank() gives ranking within ordered partition.Ties are assigned same rank with next ranking skipped.So, if you have 3 items at rank 2,
+next rank listed is rank 5
+
+Dense_Rank() gives ranking in ordered partitioned but the ranks are consecutive.No ranks are skipped if there are ranks with multiple items.
+
+
+CREATE TABLE t AS
+SELECT 'a' v FROM dual UNION ALL
+SELECT 'a'   FROM dual UNION ALL
+SELECT 'a'   FROM dual UNION ALL
+SELECT 'b'   FROM dual UNION ALL
+SELECT 'c'   FROM dual UNION ALL
+SELECT 'c'   FROM dual UNION ALL
+SELECT 'd'   FROM dual UNION ALL
+SELECT 'e'   FROM dual;
+
+SELECT
+  v,
+  ROW_NUMBER() OVER (ORDER BY v) row_number,
+  RANK()       OVER (ORDER BY v) rank,
+  DENSE_RANK() OVER (ORDER BY v) dense_rank
+FROM t
+ORDER BY v;
+The above will yield:
+
++---+------------+------+------------+
+| V | ROW_NUMBER | RANK | DENSE_RANK |
++---+------------+------+------------+
+| a |          1 |    1 |          1 |
+| a |          2 |    1 |          1 |
+| a |          3 |    1 |          1 |
+| b |          4 |    4 |          2 |
+| c |          5 |    5 |          3 |
+| c |          6 |    5 |          3 |
+| d |          7 |    7 |          4 |
+| e |          8 |    8 |          5 |
++---+------------+------+------------+
+In words
+
+ROW_NUMBER() attributes a unique value to each row
+RANK() attributes the same row number to the same value, leaving "holes"
+DENSE_RANK() attributes the same row number to the same value, leaving no "holes"
