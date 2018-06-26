@@ -1,0 +1,28 @@
+#Query to print transpose of table---SQL SERVER
+select country,city1,city2,city3
+    from
+    (select country,city ,
+     'city' + cast(row_number() over (partition by country order by country) as varchar(10)) colsq from countries
+    )Temp
+    Pivot
+    (max(city) 
+    for colsq in (city1,city2,city3)
+    )Piv
+    
+    
+    country     city
+    USA         NEW YORK
+    USA         HOUSTON
+    USA         DALLAS
+    IND         HYD
+    IND         BANGALORE
+    IND         NEW DELHI
+    UK          LONDON
+    UK          BIRMINGHAM
+    UK          MANCHESTER
+    
+    
+    COUNTRY   CITY1       CITY2       CITY3
+    USA       NEW YORK    HOUSTON     DALLAS
+    IND       HYD         BANGALORE   NEW DELHI
+    UK        LONDON      BIRMINGHAM  MANCHESTER
