@@ -1,0 +1,71 @@
+ROW_NUMBER is a function built-in to SQL Server that will return a row number for each record in your result set
+
+ROW_NUMBER Basics
+To show the row number in SQL Server, you need to use the ROW_NUMBER function. This function is broken down in to two parts.
+•	PARTITION BY – If you supply this parameter, then the row number will reset based on the value changing in the columns supplied.
+This is kinda like using a GROUP BY.
+•	ORDER BY – This is the specified order of the row number that you would like. 
+If you wanted the order of the row number to increment by an employee name (alphabetically), you do that here.
+
+
+In the following query, the results will show a row number with each record. The number will start at 1 and increment for every record 
+in order of AnimalName. You can see that that the order of the row number increment is specified as a parameter in to the ROW_NUMBER()
+function.
+1
+2
+3
+4
+5	SELECT	AnimalID,
+	AnimalName,
+	AnimalType,
+	ROW_NUMBER() OVER(ORDER BY AnimalName) AS RowNumber
+FROM	Animal
+AnimalID	AnimalName	AnimalType	RowNumber
+166	      Alpaca	    Mammal	    1
+168	      Camel	      Mammal	    2
+162	      Carabao   	Mammal	    3
+171	      Cat	        Mammal	    4
+163	      Cattle	    Mammal	    5
+184	      Chicken	    Bird	      6
+182	      Deer	      Mammal	    7
+185	      Duck	      Bird	      8
+186	      Goose	      Bird	      9
+189	      Pigeon	    Bird	      10
+188	      Quail	      Bird	      11
+187	      Turkey	    Bird	      12
+ 
+In the above example, the row number never resets. It started at 1 and kept going through all the records. 
+But what if you wanted to reset the row number back to 1 based on a value changing in your result set.
+In the following example, every time that the AnimalType changes we will reset the row number back to 1. 
+This way, each AnimalType would have it’s own set of row numbers.
+We accomplish this by listing the columns that we want to group the row numbers by in the PARTITION BY parameter.
+1
+2
+3
+4
+5
+6	SELECT	AnimalID,
+	AnimalName,
+	AnimalType,
+	ROW_NUMBER() OVER(PARTITION BY AnimalType ORDER BY AnimalName) AS RowNumber
+FROM	Animal A
+ORDER	BY AnimalType, AnimalName
+AnimalID	AnimalName	AnimalType	RowNumber
+184	      Chicken	    Bird	      1
+185     	Duck	      Bird	      2
+186	      Goose	      Bird	      3
+189	      Pigeon	    Bird	      4
+188	      Quail	      Bird	      5
+187	      Turkey	    Bird	      6
+166	      Alpaca	    Mammal	    1
+168	      Camel	      Mammal	    2
+162	      Carabao	    Mammal	    3
+171	      Cat	        Mammal	    4
+163	      Cattle	    Mammal	    5
+182	      Deer	      Mammal	    6
+ 
+ 
+
+You can specify multiple columns in the PARTITION BY and ORDER BY parameters by separating them with a comma.
+
+
