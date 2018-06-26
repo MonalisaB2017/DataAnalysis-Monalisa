@@ -1,0 +1,13 @@
+
+select product_id,sales_date,daily_sales,
+Rank() over(partition by product_id order by daily_sales DESC) as Rank1
+from sales
+where product_id in (1000,2000)
+Qualify Rank 1<4
+
+
+product_id    sales_date    daily_sales     Rank1
+1000          12-12-1998    6545.00         1
+1000          03-09-2009    4578.90         2
+2000          07-06-2010    3456.90         1
+2000          08-06-2014    2356.56         2
